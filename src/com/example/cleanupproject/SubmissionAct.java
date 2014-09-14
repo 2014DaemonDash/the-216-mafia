@@ -1,11 +1,18 @@
 package com.example.cleanupproject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Random;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationManager;
+import android.media.ExifInterface;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 
@@ -29,6 +37,11 @@ public class SubmissionAct extends Activity {
 	Button submit;
 	int randomInt ;
 	String caption;
+	String picture;
+	Bitmap bit, returnedImage;
+	String loc;
+
+	
 	Firebase myFirebaseRef = new Firebase("https://torid-heat-3961.firebaseio.com/");
 	Firebase locRef = myFirebaseRef.child("Locations");
 	
@@ -45,7 +58,7 @@ public class SubmissionAct extends Activity {
 		
 		// For Bitmap
 		Intent intent=getIntent();
-		Bitmap bit=(Bitmap)intent.getParcelableExtra("image");
+		bit=(Bitmap)intent.getParcelableExtra("image");
 		image.setImageBitmap(bit);
 		
 		//For Randon Numbers(ID)		
@@ -64,30 +77,46 @@ public class SubmissionAct extends Activity {
 				 * get randomInt, caption and location and send to server.
 				 */
 				//For Comment
+				LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE); 
+				Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+				double longitude = location.getLongitude();
+				double latitude = location.getLatitude();
 				
-				
-				
+				picture=BitMapToString(bit);
 				
 				caption=Comment.getText().toString();
 				Log.i("Mos", caption);
 				Firebase idRef = locRef.child(""+randomInt);
 				idRef.child("Caption").setValue(caption);
-				idRef.child("Location").setValue("NoLocationAvailable");
-				idRef.child("String").setValue("NoImageAvailable");
+				idRef.child("Location").setValue(longitude+":"+latitude);
+				idRef.child("String").setValue(""+picture);
 				idRef.child("NumUsers").setValue(0);
 				
 				
 				
-				
+				Intent returntomain=new Intent(SubmissionAct.this,LocationsList.class);
+				returntomain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(returntomain);
 				
 				
 			}
+			
 			
 		});
 		
 		
 		
+		
 	}
+	//Convert Bitmap to String
+		public String BitMapToString(Bitmap bitmap){
+	        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+	        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+	        byte [] b=baos.toByteArray();
+	        String temp=Base64.encodeToString(b, Base64.DEFAULT);
+	        return temp;
+	  }
+
 	
 //	public int makeId(){
 //		int startAt = 1234;
@@ -100,6 +129,7 @@ public class SubmissionAct extends Activity {
 //		
 //	}
 
+		
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

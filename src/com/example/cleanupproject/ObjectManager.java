@@ -18,11 +18,22 @@ public class ObjectManager implements Serializable {
 		
 	}
 	
+	public LocationObj getObjWithId(int id){
+		for(LocationObj l:locationObjects){
+			if (l.getId()==id){
+				return l;
+			}
+		}
+		return null;
+		
+		
+	}
+	
 	public ArrayList<String> getListFormat(){
 		ArrayList<String> toReturn = new ArrayList<String>();
 		
 		for(LocationObj l:locationObjects){
-			toReturn.add("Cleanup# "+l.getId()+" -            Good Samaritans: "+l.getNumPeople()+"/20");
+			toReturn.add("Cleanup# "+l.getId()+" -            Joined: "+l.getNumPeople()+"/20");
 		}
 		return toReturn;
 		

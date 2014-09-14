@@ -7,13 +7,13 @@ import android.location.Location;
 
 public class LocationObj implements Serializable {
 	private int id;
-	private Location loc;
+	private String loc;
 	private ArrayList<Integer> userIds;
 	private String mainImage;
 	private String caption;
 	private int numPeople;
 	
-	public LocationObj(int id, Location loc,
+	public LocationObj(int id, String loc,
 			String mainImage, String caption) {
 		numPeople = 0;
 		this.userIds = new ArrayList<Integer>();
@@ -38,9 +38,21 @@ public class LocationObj implements Serializable {
 		return id;
 	}
 	
+	public String getCaption(){
+		return caption;
+	}
+	
 	public void addUserId(int id){
 		userIds.add(id);
 		
+	}
+	
+	public String getMainImage(){
+		return mainImage;
+	}
+	
+	public String getLoc(){
+		return loc;
 	}
 	
 
