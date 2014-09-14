@@ -64,10 +64,18 @@ public class SubmissionAct extends Activity {
 				 * get randomInt, caption and location and send to server.
 				 */
 				//For Comment
+				
+				
+				
+				
 				caption=Comment.getText().toString();
 				Log.i("Mos", caption);
 				Firebase idRef = locRef.child(""+randomInt);
 				idRef.child("Caption").setValue(caption);
+				idRef.child("Location").setValue("NoLocationAvailable");
+				idRef.child("String").setValue("NoImageAvailable");
+				idRef.child("NumUsers").setValue(0);
+				
 				
 				
 				
@@ -80,7 +88,17 @@ public class SubmissionAct extends Activity {
 		
 		
 	}
-
+	
+//	public int makeId(){
+//		int startAt = 1234;
+//
+//		new Firebase("https://torid-heat-3961.firebaseio.com/Locations/startAt").once("7250", function(snap) {
+//			   console.log('I fetched a user!', snap.val());
+//			});
+//return 0;
+//
+//		
+//	}
 
 
 	@Override
